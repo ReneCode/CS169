@@ -20,6 +20,7 @@ class Class
     }
   end
 
+   "my name id #{name} "
 
 end
 

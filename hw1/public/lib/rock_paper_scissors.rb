@@ -25,7 +25,11 @@ class RockPaperScissors
     if t1.class == Array  &&  t1[0].class == Array
       p1 = tournament_winner(t1)
       p2 = tournament_winner(t2)
-      return winner(p1, p2)
+# only works with one level
+#      return winner(p1, p2)
+
+# that is better:
+      tournament_winner( [p1, p2] )
     else
       return winner(t1, t2)
     end

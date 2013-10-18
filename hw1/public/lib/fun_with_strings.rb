@@ -8,16 +8,19 @@ module FunWithStrings
   end
 
   def count_words
-		hash = {}
+#		hash = {}
+    # default-value is 0
+		hash = Hash.new 0
 		# replace non words with blank, so only words
 		# are in the string.
     self.downcase.gsub(/\W/, ' ').split.each do |word |
-			if (hash[word] == nil)
-				hash[word] = 1
-			else
-				# found one more times
-				hash[word] = hash[word] + 1
-			end
+#		  if (hash[word] == nil)
+#				hash[word] = 1
+#			else
+#				# found one more times
+#				hash[word] = hash[word] + 1
+#			end
+      hash[word] += 1
 		end
 	  hash
   end
@@ -28,12 +31,18 @@ module FunWithStrings
 		aWord.each do | word |
 			# create an unquie key
 			# just take the string and sort it
-			aChar = []
-			word.each_char { |c|aChar.push(c) }
-			aChar.sort!
-			key = aChar.join
+			# car => acr    rac => acr
+			
+#			aChar = []
+#			word.each_char { |c|aChar.push(c) }
+#			aChar.sort!
+#			key = aChar.join
+			
+			# better way to get the key
+			key = word.chars.sort.join
+#			puts("key=" + key.to_s)
 			if (!hGroup.key?(key))
-				hGroup[key] = [word]
+				hGroup[key] = [ word ]
 			else
 				hGroup[key].push(word)
 			end

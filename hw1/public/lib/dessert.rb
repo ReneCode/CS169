@@ -20,7 +20,11 @@ class JellyBean < Dessert
   end
   
   def delicious?
-    return false if @flavor == "licorice"
-    return super#delicious?
+    # short solution
+    @flavor == "licorice" ? false : super
+  
+    # long solution
+#    return false if @flavor == "licorice"
+#    return super
   end
 end
