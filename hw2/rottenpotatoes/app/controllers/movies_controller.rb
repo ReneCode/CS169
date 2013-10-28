@@ -7,7 +7,54 @@ class MoviesController < ApplicationController
   end
 
   def index
-    @movies = Movie.all
+  
+    redirect = false
+    # get sort order from the url-parameter
+    order_field = params[:order]
+    if order_field == nil
+      # if no order set, get the last order from the session
+      order_field = session[:order] 
+      # if there is no session-data, that make a default-value ('id')
+      order_field = 'id' if order_field == nil
+      params[:order] = order_field
+      redirect = true
+    else
+      # store order into the session for the next time
+      session[:order] = order_field
+    end
+
+    # ratings = { "P"=>1, "G"=1}
+    # get only the keys of the params
+    @checked_ratings = params[:ratings].keys if (params[:ratings] != nil)
+    if @checked_ratings == nil
+      # if not set via URL, than get stored ratings
+      @checked_ratings = session[:ratings]
+      # all ratingss on, if there is no rating stored
+      @checked_ratings = Movie.valid_ratings if @checked_ratings == nil
+      # rebuild the ratings-hash for the redirect-params
+      para = {}
+      @checked_ratings.each do |r|
+        para[r] = 1
+      end
+      params[:ratings] = para
+      redirect = true
+    else
+      # store ratings for next call
+      session[:ratings] = @checked_ratings
+    end
+    if (redirect == true)
+      @tmp = params.inspect
+      puts "hallo:" + order_field.inspect    
+      flash.keep
+      redirect_to movies_path(params)
+    end
+
+    # query to database
+    @movies = Movie.where(rating: @checked_ratings).all(:order => order_field)
+    @css_title = 'hilite' if order_field =~ /title/
+    @css_release_date = 'hilite' if order_field =~ /release_date/
+    # get the list of all valid ratings from the model
+    @all_ratings = Movie.valid_ratings
   end
 
   def new

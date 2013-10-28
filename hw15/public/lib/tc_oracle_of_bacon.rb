@@ -6,23 +6,26 @@ class MyUnitTest < Test::Unit::TestCase
 
   def test_hw15_1()
   
-    my_api_key = '38b99ce9c87'
-#    oob = OracleObBacon.new(my_api_key)
-    
-    x = OracleOfBacon::Response.new(File.read '../spec/graph_example.xml')
- #   print (x.type)
-    print (x.data)
-    
-=begin    
-  #	b1 = BookInStock.new("", 0)
-  #	b2 = BookInStock.new("abc", 0)
-	b3 = BookInStock.new("abc", 22)
-	assert_equal("abc", b3.isbn)
-	assert_equal("$22.00", b3.price_as_string)
-	assert_equal("$33.80", BookInStock.new("abc", 33.8).price_as_string)
-=end
+    my_api_key = '38b99ce9ec87'
+    oob = OracleOfBacon.new(my_api_key)
+    oob.to = 'Laurence Olivier'
+    oob.find_connections
+#    puts oob.response.data
+
+  	assert_equal(:graph, oob.response.type )
+    assert_equal(:graph, oob.response.type )
+    assert( oob.response.data.include?('A Bridge Too Far (1977)'), "wrong data" + oob.response.data.inspect )
   end
 
-end
 
+
+  def test_hw15_2()
+    my_api_key = 'xyz'
+    oob = OracleOfBacon.new(my_api_key)
+    oob.to = 'Laurence Olivier'
+    oob.find_connections
+  	assert_equal(:error, oob.response.type )
+   end
+
+end
 
